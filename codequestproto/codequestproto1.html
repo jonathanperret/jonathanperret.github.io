@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <title>CodeQuest</title>
+        <script src="jquery.js"></script>
+        <link id="bespin_base" href="bespin">
+        <link href="bespin/BespinEmbedded.css" type="text/css" rel="stylesheet">
+
+        <script type="text/javascript" src="bespin/BespinEmbedded.js"></script>
+
+        <script type="text/javascript">
+            // The editor is set within the window.onBespinLoad function.
+            var editor;
+
+            window.onBespinLoad = function() {
+                var console = bespin.tiki.require('bespin:console').console;
+                var Range = bespin.tiki.require('rangeutils:utils/range');
+
+                console.log("this is called when Bespin is loaded");
+
+                // Get the Bespin editor.
+                editor = document.getElementById("editor").bespin.editor;
+
+                // Bespin event handler:
+                editor.textChanged.add(function(oldRange, newRange, newValue) {
+                    runTests();
+                });
+
+                runTests();
+            };
+
+            function runTests() {
+                var testDivs = $('.test');
+                var allPassed = true;
+
+                testDivs.each(function() {
+                    var testDiv = $(this);
+
+                    if(!testDiv.is(':visible') && !allPassed) return;
+
+                    var testInput = testDiv.attr('test-input');
+
+                    var scrpt = '(' + editor.value + ')';
+                    var out;
+
+                    try {
+                        scrptFn = eval(scrpt);
+                        out = scrptFn(testInput);
+                    } catch(e) {
+                        out = e.line + ':' + e.toString();
+                    }
+
+                    expectedValue = testDiv.attr('test-expected');
+
+                    var success = out == expectedValue;
+
+                    allPassed = allPassed && success;
+
+                    var message = "For input '" + testInput + "', got '" + out + "'";
+
+                    if(!success) {
+                        message += ", but expected '" + expectedValue + "'";
+                    }
+
+                    testDiv.addClass('success_'+success);
+                    testDiv.removeClass('success_'+!success);
+
+                    testDiv.text(message);
+
+                    testDiv.slideDown('slow');
+                });
+
+                if(allPassed) {
+                    $('.reveal-on-success').slideDown('slow');
+                }
+            }
+        </script>
+        <style type="text/css">
+            BODY { font-family: Optima; }
+            .narrative { margin-bottom: 10px; }
+            .reveal-on-success { display:none; }
+            .test { padding: 5px; width: 580px; margin: 5px; display: none; }
+            .success_true { color: black; background: green; }
+            .success_false { color:white; background: red; }
+            #editor { width: 600px; height: 200px; border:1px solid black; }
+        </style>
+    </head>
+    <body>
+        <div class="narrative">
+            <p>The alien stops in front of a closed door, and turns to you expectantly.</p>
+            <div class="reveal-on-success">
+                <p>The door opens.</p>
+                <p>Beaming with joy, the creature beckons you to follow inside.</p>
+                <p><a href="#">»next</a></p>
+            </div>
+        </div>
+
+        <div id="editor" class="bespin"
+            data-bespinoptions='{ "settings":
+                { "tabstop": 4 },
+                "syntax": "js", "stealFocus": true }'>function(name) {
+    return "hello !";
+}</div>
+
+        <div class="test" test-input="Joe" test-expected="hello, Joe !"></div>
+        <div class="test" test-input="Alf" test-expected="hello, Alf !"></div>
+        <div class="test" test-input="Mike,Brandon" test-expected="hello, Mike ! hello, Brandon !"></div>
+        <div class="test" test-input="Mike,Brandon and Bob" test-expected="hello, Mike ! hello, Brandon ! hello, Bob !"></div>
+
+    </body>
+</html>
+
