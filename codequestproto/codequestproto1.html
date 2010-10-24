@@ -88,25 +88,25 @@
     <body>
         <div class="narrative">
             <p>The alien stops in front of a closed door, and turns to you expectantly.</p>
-            <div class="reveal-on-success">
-                <p>The door opens.</p>
-                <p>Beaming with joy, the creature beckons you to follow inside.</p>
-                <p><a href="#">»next</a></p>
-            </div>
         </div>
 
         <div id="editor" class="bespin"
             data-bespinoptions='{ "settings":
                 { "tabstop": 4 },
-                "syntax": "js", "stealFocus": true }'>function(name) {
-    return "hello !";
+                "syntax": "js", "stealFocus": true }'>function(input) {
+    return "*";
 }</div>
 
-        <div class="test" test-input="Joe" test-expected="hello, Joe !"></div>
-        <div class="test" test-input="Alf" test-expected="hello, Alf !"></div>
-        <div class="test" test-input="Mike,Brandon" test-expected="hello, Mike ! hello, Brandon !"></div>
-        <div class="test" test-input="Mike,Brandon and Bob" test-expected="hello, Mike ! hello, Brandon ! hello, Bob !"></div>
+        <div class="test" test-input="≋" test-expected="<≋>"></div>
+        <div class="test" test-input="≗≘≗" test-expected="<≗≘≗>"></div>
+        <div class="test" test-input="≌.≎" test-expected="<≌>.<≎>"></div>
+        <div class="test" test-input="≙.≔≛≕.≜" test-expected="<≙>.<≔≛≕>.<≜>"></div>
 
+        <div class="narrative reveal-on-success">
+            <p>Success ! With a whirring sound, the door slides open.</p>
+            <p>Beaming with joy, the creature beckons you to follow inside.</p>
+            <!--<p><a href="#">»next</a></p>-->
+        </div>
     </body>
 </html>
 
