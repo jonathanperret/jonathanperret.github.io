@@ -8,7 +8,7 @@
         </ul>
         <script>
 function gotRepos(data) {
-  var reposWithPages = data.data.filter(function (repo) {return repo.has_pages && !repo.fork && repo.name !== 'jonathanperret.github.com';});
+  var reposWithPages = data.data.filter(function (repo) {return repo.has_pages && !repo.fork && repo.name !== 'jonathanperret.github.io';});
   console.log(reposWithPages);
   document.getElementById('repos').innerHTML =
     reposWithPages.map(function (repo) {
